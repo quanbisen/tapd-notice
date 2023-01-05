@@ -1,0 +1,16 @@
+settings:
+  application:
+    host: 0.0.0.0
+    port: 8080
+  database:
+    source: root:10010@tcp(172.10.23.92:3306)/tapd-notice?charset=utf8&parseTime=True&loc=Local&timeout=1000ms
+    maxidleconns: 5
+    maxopenconns: 20
+  dingding:
+    appkey:                               # 钉钉应用的key
+    appsecret:                            # 钉钉应用的密钥
+    agentid:                              # 钉钉应用通知的agentid
+  tapd:
+    companyid:                            # TAPD的公司id
+    apiuser:                              # TAPD的apiuser
+    apipassword:                          # TAPD的apipassword
