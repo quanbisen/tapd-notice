@@ -9,7 +9,7 @@ type Event struct {
 	Id           string   `json:"id"`
 	Name         string   `json:"name"`
 	Title        string   `json:"title"`
-	User         string   `json:"user"`
+	Creator      []string `json:"creator"`
 	EventKey     string   `json:"event_key"`
 	Owner        []string `json:"owner"`
 	CurrentOwner []string `json:"current_owner"`

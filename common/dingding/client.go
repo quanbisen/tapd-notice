@@ -3,6 +3,7 @@ package dingding
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -147,7 +148,7 @@ func (c *Client) listDeptUser(data map[string]interface{}) (*dto.DingdingDeptUse
 
 func (c *Client) SendAppMessage(title, text string, userIdList []string) (*dto.DingdingSendAppMessageResult, error) {
 	if len(userIdList) == 0 {
-		return nil, nil
+		return nil, errors.New("no userid to received")
 	}
 	data := make(map[string]interface{}, 0)
 	data["agent_id"] = c.agentId

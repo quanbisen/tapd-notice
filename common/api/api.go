@@ -69,6 +69,7 @@ func (e *Api) Bind(d interface{}, bindings ...binding.Binding) *Api {
 
 func (e *Api) MakeService(c *service.Service) *Api {
 	c.Orm = e.Orm
+	c.C = e.Context
 	return e
 }
 

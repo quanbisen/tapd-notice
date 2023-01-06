@@ -2,11 +2,13 @@ package service
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"gorm.io/gorm"
 )
 
 type Service struct {
 	Orm   *gorm.DB
+	C     *gin.Context
 	Error error
 }
 

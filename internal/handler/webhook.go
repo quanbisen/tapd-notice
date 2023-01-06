@@ -25,6 +25,7 @@ func (api *WebhookApi) SendWebhook(c *gin.Context) {
 		api.Error(http.StatusInternalServerError, err, "Api prepare error")
 		return
 	}
+	s.PrintRawData()
 	err = s.SendMessage(&webhook)
 	if err != nil {
 		api.Error(http.StatusInternalServerError, err, "SendMessage error")

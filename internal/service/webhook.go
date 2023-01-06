@@ -45,6 +45,27 @@ func (s *WebhookService) SendMessage(data *dto.WebhookData) error {
 	return nil
 }
 
+func (s *WebhookService) PrintRawData() error {
+	data := make(map[string]interface{}, 0)
+	if v, exist := s.C.Get("body"); exist {
+		if byts, ok := v.([]byte); ok {
+			if err := json.Unmarshal(byts, &data); err != nil {
+				log.Printf("WebhookService PrintRawData failed, json.Unmarshal error: %s\n", err)
+				return fmt.Errorf("WebhookService PrintRawData failed, json.Unmarshal error: %s\n", err)
+			}
+			newByts, err := json.Marshal(data)
+			if err != nil {
+				log.Printf("WebhookService PrintRawData failed, json.Marshal error: %s\n", err)
+				return fmt.Errorf("WebhookService PrintRawData failed, json.Marshal error: %s\n", err)
+			}
+			log.Println("WebhookService received message start...")
+			fmt.Println(string(newByts))
+			log.Println("WebhookService received message end...")
+		}
+	}
+	return nil
+}
+
 func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 	var (
 		res         string
@@ -61,7 +82,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s  \n  ", common.EventKeyMap[common.StoryCreate])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Name, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.StoryStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.Owner, ","))
 	} else if data.Event.EventKey == common.StoryStatusChange {
@@ -69,7 +90,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s：%s->%s  \n  ", common.EventKeyMap[common.StoryStatusChange], common.StoryStatusMap[data.Event.StatusFromTo.From], common.StoryStatusMap[data.Event.StatusFromTo.To])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Name, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.StoryStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.Owner, ","))
 	} else if data.Event.EventKey == common.BugCreate {
@@ -77,7 +98,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s  \n  ", common.EventKeyMap[common.BugCreate])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Title, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.BugStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.CurrentOwner, ","))
 	} else if data.Event.EventKey == common.BugStatusChange {
@@ -85,7 +106,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s：%s->%s  \n  ", common.EventKeyMap[common.BugStatusChange], common.BugStatusMap[data.Event.StatusFromTo.From], common.BugStatusMap[data.Event.StatusFromTo.To])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Title, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.BugStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.CurrentOwner, ","))
 	} else if data.Event.EventKey == common.TaskCreate {
@@ -93,7 +114,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s  \n  ", common.EventKeyMap[common.TaskCreate])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Name, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.TaskStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.Owner, ","))
 	} else if data.Event.EventKey == common.TaskStatusChange {
@@ -101,7 +122,7 @@ func (s *WebhookService) generateMarkdownMessage(data *dto.WebhookData) string {
 		res += fmt.Sprintf("### %s：%s->%s  \n  ", common.EventKeyMap[common.TaskStatusChange], common.TaskStatusMap[data.Event.StatusFromTo.From], common.TaskStatusMap[data.Event.StatusFromTo.To])
 		res += fmt.Sprintf("**项目：** %s  \n  ", projectName)
 		res += fmt.Sprintf("**标题：** [%s](%s)  \n  ", data.Event.Name, accessUrl)
-		res += fmt.Sprintf("**创建人：** %s  \n  ", data.Event.User)
+		res += fmt.Sprintf("**创建人：** %s  \n  ", strings.Join(data.Event.Creator, ","))
 		res += fmt.Sprintf("**当前状态：** %s  \n  ", common.TaskStatusMap[data.Event.Status])
 		res += fmt.Sprintf("**处理人：** %s  ", strings.Join(data.Event.Owner, ","))
 	}
@@ -121,18 +142,18 @@ func (s *WebhookService) sendMessage(title string, text string, data *dto.Webhoo
 	if data.Event.EventKey == common.StoryCreate {
 		adviseUsers = append(adviseUsers, data.Event.Owner...)
 	} else if data.Event.EventKey == common.StoryStatusChange {
-		adviseUsers = append(adviseUsers, data.Event.User)
+		adviseUsers = append(adviseUsers, data.Event.Creator...)
 		adviseUsers = append(adviseUsers, data.Event.Owner...)
 	} else if data.Event.EventKey == common.BugCreate {
 		adviseUsers = append(adviseUsers, data.Event.CurrentOwner...)
 	} else if data.Event.EventKey == common.BugStatusChange {
-		adviseUsers = append(adviseUsers, data.Event.User)
+		adviseUsers = append(adviseUsers, data.Event.Creator...)
 		adviseUsers = append(adviseUsers, data.Event.CurrentOwner...)
 	} else if data.Event.EventKey == common.TaskCreate {
 		adviseUsers = append(adviseUsers, data.Event.Owner...)
 		adviseUsers = append(adviseUsers, data.Event.CC...)
 	} else if data.Event.EventKey == common.TaskStatusChange {
-		adviseUsers = append(adviseUsers, data.Event.User)
+		adviseUsers = append(adviseUsers, data.Event.Creator...)
 		adviseUsers = append(adviseUsers, data.Event.Owner...)
 		adviseUsers = append(adviseUsers, data.Event.CC...)
 	}

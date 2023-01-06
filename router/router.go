@@ -15,7 +15,8 @@ func NewRouter() *gin.Engine {
 		middleware.NoCache(),
 		middleware.Options(),
 		middleware.Secure(),
-		middleware.ContextDB())
+		middleware.ContextDB(),
+		middleware.ContextBody())
 
 	engine.GET("ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, "ok")
