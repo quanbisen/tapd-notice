@@ -17,10 +17,22 @@ func TestConvertEncode2(t *testing.T) {
 }
 
 func TestConvertEncode3(t *testing.T) {
-	fmt.Println(ConvertUnicodeToCharacter("\\u5168\\u78a7\\u68ee"))
+	fmt.Println(ConvertUnicodeToCharacter("\\u003cp\\u003e测试评论\\u003c/p\\u003e"))
 }
 
 func TestCharToPinyin(t *testing.T) {
 	assert.Equal(t, "quanbisen", CharToPinyin("全碧森"))
 	assert.Equal(t, "quanbisen123", CharToPinyin("全碧森123"))
+}
+
+func TestExtractComment(t *testing.T) {
+	s := "\n  123\n  456\n  "
+	fmt.Println(ExtractComment(s))
+}
+
+func TestExtractCommentCuePeople(t *testing.T) {
+	s := "\n   @全碧森(全碧森)  @邹思瑶(邹思瑶) 麻烦帮忙解决\n  \n  "
+	assert.Equal(t, ExtractCommentCuePeople(s), []string{"全碧森", "邹思瑶"})
+	s = "\n   @全碧森(全碧森) @邹\n  \n  "
+	assert.Equal(t, ExtractCommentCuePeople(s), []string{"全碧森"})
 }

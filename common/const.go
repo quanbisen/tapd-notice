@@ -3,10 +3,19 @@ package common
 var (
 	StoryCreate       = "story::create"
 	StoryStatusChange = "story::status_change"
+	StoryComment      = "story::comment"
 	BugCreate         = "bug::create"
 	BugStatusChange   = "bug::status_change"
+	BugComment        = "bug::comment"
 	TaskCreate        = "task::create"
 	TaskStatusChange  = "task::status_change"
+	TaskComment       = "task::comment"
+)
+
+var (
+	CommentAdd    = "add"
+	CommentUpdate = "update"
+	CommentDelete = "delete"
 )
 
 var StoryStatusMap = map[string]string{
@@ -41,10 +50,19 @@ var TaskStatusMap = map[string]string{
 var EventKeyMap = map[string]string{
 	StoryCreate:       "需求创建",
 	StoryStatusChange: "需求状态变更",
+	StoryComment:      "需求评论",
 	BugCreate:         "缺陷创建",
 	BugStatusChange:   "缺陷状态变更",
+	BugComment:        "缺陷评论",
 	TaskCreate:        "任务创建",
 	TaskStatusChange:  "任务状态变更",
+	TaskComment:       "任务评论",
+}
+
+var CommentActionMap = map[string]string{
+	CommentAdd:    "新增",
+	CommentUpdate: "更新",
+	CommentDelete: "删除",
 }
 
 var (

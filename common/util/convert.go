@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/mozillazg/go-pinyin"
+	"regexp"
 	"strconv"
 	"strings"
 	"unicode"
@@ -70,6 +71,28 @@ func CharToPinyin(s string) string {
 			res += pinyin.LazyPinyin(fmt.Sprintf("%v", string(r)), args)[0]
 		} else {
 			res += fmt.Sprintf("%v", string(r))
+		}
+	}
+	return res
+}
+
+// ExtractComment 提取TAPD评论相关信息
+func ExtractComment(s string) string {
+	s = strings.Trim(s, "\n  ")
+	s = strings.ReplaceAll(s, "\n  ", ",")
+	return s
+}
+
+// ExtractCommentCuePeople 提取评论里面@的人员
+func ExtractCommentCuePeople(s string) []string {
+	res := make([]string, 0)
+	commentRegex := regexp.MustCompile("\\s@\\S+\\s")
+	slice := commentRegex.FindAllString(s, -1)
+	peopleRegex := regexp.MustCompile("@[^\\(\\)\\s]+")
+	for _, sub := range slice {
+		people := peopleRegex.FindAllString(sub, 1)
+		if len(people) > 0 {
+			res = append(res, strings.ReplaceAll(people[0], "@", ""))
 		}
 	}
 	return res
