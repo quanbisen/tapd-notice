@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"bytes"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"io"
 	"log"
@@ -12,7 +11,6 @@ import (
 func ContextBody() gin.HandlerFunc {
 	return func(context *gin.Context) {
 		// 针对/api/v1/webhook接口设置body文本存储供WebhookService服务打印使用
-		fmt.Println(context.Request.URL.Path)
 		if context.Request.URL.Path == "/api/v1/webhook" {
 			byts, err := PeekRequest(context.Request)
 			if err != nil {
