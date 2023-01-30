@@ -89,6 +89,7 @@ func runAPI() {
 	go func() {
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			fmt.Printf("api server启动失败, err: %s\n", err)
+			os.Exit(-1)
 		}
 	}()
 	fmt.Printf("api server listen on %s\n", server.Addr)

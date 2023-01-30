@@ -61,10 +61,12 @@ func (c *Client) ListDept() ([]dto.DingdingDept, error) {
 	}
 	res = append(res, leafNode...)
 	for len(leafNode) > 0 {
-		rangeDepts := leafNode
+		rangeDepts := make([]dto.DingdingDept, 0)
+		rangeDepts = append(rangeDepts, leafNode...)
 		leafNode = leafNode[0:0]
 		for i := 0; i < len(rangeDepts); i++ {
 			depts, err := c.listDept(util.Int64Addr(rangeDepts[i].DeptId))
+			time.Sleep(time.Millisecond * 200)
 			if err != nil {
 				log.Printf("Dingding Client listDept failed, error: %s\n", err)
 				return nil, err
