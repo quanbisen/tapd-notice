@@ -43,7 +43,7 @@ settings:
 ​        数据库只需创建数据库即可，程序运行时，使用的`gorm`框架会自动创建数据库表。
 
 ```sql
-CREATE DATABASE `tapd_notice` CHARACTER SET 'utf8mb4';
+CREATE DATABASE `tapd-notice` CHARACTER SET 'utf8mb4';
 ```
 
 * 钉钉
