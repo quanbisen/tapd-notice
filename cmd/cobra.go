@@ -71,7 +71,7 @@ func runCron() {
 
 	projectCronJob := cron.NewTAPDProjectCronJob(orm.DB, tapdClient)
 
-	goCron.AddJob("0 0 * * *", deptCronJob)
+	goCron.AddJob("15 0 * * *", deptCronJob)
 	goCron.AddJob("30 0 * * *", userCronJob)
 	goCron.AddJob("0 0 * * *", projectCronJob)
 	goCron.Start()
