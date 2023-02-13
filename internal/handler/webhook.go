@@ -15,7 +15,7 @@ type WebhookApi struct {
 	api.Api
 }
 
-func (api *WebhookApi) SendWebhook(c *gin.Context) {
+func (api WebhookApi) SendWebhook(c *gin.Context) {
 	webhook := dto.WebhookData{}
 	s := service.NewWebhookService(config.GetDingdingConfig())
 	err := api.MakeContext(c).
