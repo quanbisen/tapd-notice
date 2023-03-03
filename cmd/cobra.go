@@ -60,8 +60,8 @@ func Execute() {
 
 func runCron() {
 	// dingdingClient
-	dingdingConfig := config.GetDingdingConfig()
-	dingdingClient := dingding.NewClient(dingdingConfig.AppKey, dingdingConfig.AppSecret, "")
+	tapdAgentConfig := config.GetDingdingConfig().TapdAgent
+	dingdingClient := dingding.NewClient(tapdAgentConfig.AppKey, tapdAgentConfig.AppSecret, "")
 	// tapdClient
 	tapdConfig := config.GetTAPDConfig()
 	tapdClient := tapd.NewClient(tapdConfig.CompanyId, tapdConfig.ApiUser, tapdConfig.ApiPassword)

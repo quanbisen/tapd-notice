@@ -10,7 +10,7 @@ var settings Settings
 
 type Settings struct {
 	ApplicationConfig ApplicationConfig
-	DingdingConfig    DingdingConfig
+	DingdingConfig    Dingding
 	TAPDConfig        TAPDConfig
 	DatabaseConfig    DatabaseConfig
 }
@@ -48,7 +48,7 @@ func GetApplicationConfig() ApplicationConfig {
 	return settings.ApplicationConfig
 }
 
-func GetDingdingConfig() DingdingConfig {
+func GetDingdingConfig() Dingding {
 	return settings.DingdingConfig
 }
 

@@ -148,7 +148,7 @@ func (c *Client) listDeptUser(data map[string]interface{}) (*dto.DingdingDeptUse
 	return &res, nil
 }
 
-func (c *Client) SendAppMessage(title, text string, userIdList []string) (*dto.DingdingSendAppMessageResult, error) {
+func (c *Client) SendAppMessage(msg map[string]interface{}, userIdList []string) (*dto.DingdingSendAppMessageResult, error) {
 	if len(userIdList) == 0 {
 		return nil, errors.New("no userid to received")
 	}
@@ -156,13 +156,7 @@ func (c *Client) SendAppMessage(title, text string, userIdList []string) (*dto.D
 	data["agent_id"] = c.agentId
 	data["userid_list"] = strings.Join(userIdList, ",")
 	data["to_all_user"] = false
-	data["msg"] = map[string]interface{}{
-		"msgtype": "markdown",
-		"markdown": map[string]interface{}{
-			"title": title,
-			"text":  text,
-		},
-	}
+	data["msg"] = msg
 	var res dto.DingdingSendAppMessageResult
 	url := c.getUrlPrefix() + fmt.Sprintf("/topapi/message/corpconversation/asyncsend_v2?access_token=%s", c.accessToken)
 	byts, err := c.doRequest(url, "POST", data)

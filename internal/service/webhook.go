@@ -225,7 +225,14 @@ func (s *WebhookService) sendMessage(title string, text string, data *dto.Webhoo
 		userIds = append(userIds, user.UserId)
 	}
 	userIds = util.Unique(userIds)
-	return s.dingdingClient.SendAppMessage(title, text, userIds)
+	msg := map[string]interface{}{
+		"msgtype": "markdown",
+		"markdown": map[string]interface{}{
+			"title": title,
+			"text":  text,
+		},
+	}
+	return s.dingdingClient.SendAppMessage(msg, userIds)
 }
 
 func (s *WebhookService) doRequest(url string, data interface{}) (*dto.WebhookResult, error) {

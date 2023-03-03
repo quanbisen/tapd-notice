@@ -50,7 +50,14 @@ func TestSendAppMessage(t *testing.T) {
 	appSecret := os.Getenv("appsecret")
 	agentId := os.Getenv("agentid")
 	client := NewClient(appKey, appSecret, agentId)
-	res, err := client.SendAppMessage("需求创建", "### 需求创建  \n  **标题：** [测试需求](https://www.tapd.cn/50628422/prong/stories/view/1150628422001003390)  \n  **创建人：** 全碧森  \n  **当前状态：** 规划中  \n  **处理人：** quanbisen,韦炳铁  ", "16601997543784086")
+	msg := map[string]interface{}{
+		"msgtype": "markdown",
+		"markdown": map[string]interface{}{
+			"title": "需求创建",
+			"text":  "### 需求创建  \n  **标题：** [测试需求](https://www.tapd.cn/50628422/prong/stories/view/1150628422001003390)  \n  **创建人：** 全碧森  \n  **当前状态：** 规划中  \n  **处理人：** quanbisen,韦炳铁  ",
+		},
+	}
+	res, err := client.SendAppMessage(msg, []string{"16601997543784086"})
 	assert.Empty(t, err)
 	assert.Equal(t, "ok", res.ErrMsg)
 }

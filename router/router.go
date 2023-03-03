@@ -26,6 +26,9 @@ func NewRouter() *gin.Engine {
 	{
 		webhookApi := handler.WebhookApi{}
 		v1.POST("/webhook", webhookApi.SendWebhook)
+
+		gitlabAgentApi := handler.GitlabAgentApi{}
+		v1.POST("/gitlab/message", gitlabAgentApi.SendMessage)
 	}
 	return engine
 }

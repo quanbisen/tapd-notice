@@ -17,7 +17,7 @@ type WebhookApi struct {
 
 func (api WebhookApi) SendWebhook(c *gin.Context) {
 	webhook := dto.WebhookData{}
-	s := service.NewWebhookService(config.GetDingdingConfig())
+	s := service.NewWebhookService(config.GetDingdingConfig().TapdAgent)
 	err := api.MakeContext(c).
 		MakeOrm().
 		MakeService(&s.Service).

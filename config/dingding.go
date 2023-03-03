@@ -2,23 +2,36 @@ package config
 
 import "github.com/spf13/viper"
 
+type Dingding struct {
+	TapdAgent   DingdingConfig
+	GitlabAgent DingdingConfig
+}
+
 type DingdingConfig struct {
 	AppKey    string
 	AppSecret string
 	AgentId   int64
 }
 
-func initDingding(v *viper.Viper) DingdingConfig {
-	dingdingConfig := DingdingConfig{
-		AppKey:    v.GetString("appkey"),
-		AppSecret: v.GetString("appsecret"),
-		AgentId:   v.GetInt64("agentid"),
+func initDingding(v *viper.Viper) Dingding {
+	dingding := Dingding{
+		TapdAgent: DingdingConfig{
+			AppKey:    v.GetString("tapdagent.appkey"),
+			AppSecret: v.GetString("tapdagent.appsecret"),
+			AgentId:   v.GetInt64("tapdagent.agentid"),
+		},
+		GitlabAgent: DingdingConfig{
+			AppKey:    v.GetString("gitlabagent.appkey"),
+			AppSecret: v.GetString("gitlabagent.appsecret"),
+			AgentId:   v.GetInt64("gitlabagent.agentid"),
+		},
 	}
-	validateDingding(dingdingConfig)
-	return dingdingConfig
+	validateDingdingConfig(dingding.TapdAgent)
+	validateDingdingConfig(dingding.GitlabAgent)
+	return dingding
 }
 
-func validateDingding(config DingdingConfig) {
+func validateDingdingConfig(config DingdingConfig) {
 	if config.AppKey == "" {
 		panic("dingding.appkey config empty.")
 	}
