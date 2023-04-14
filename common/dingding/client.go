@@ -109,7 +109,7 @@ func (c *Client) ListDeptUser(deptId int64) ([]dto.DingdingDeptUser, error) {
 	data := make(map[string]interface{}, 3)
 	data["dept_id"] = deptId
 	data["cursor"] = 0
-	data["size"] = 1
+	data["size"] = 100
 	listRes, err := c.listDeptUser(data)
 	if err != nil {
 		log.Printf("Dingding Client ListDeptUser failed, error: %s\n", err)

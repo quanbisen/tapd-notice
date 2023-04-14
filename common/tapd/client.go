@@ -83,6 +83,9 @@ func (c *Client) doRequest(url string, method string, data interface{}) ([]byte,
 	if err != nil {
 		return nil, err
 	}
+	if res.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("failed at status code: %d", res.StatusCode)
+	}
 	return io.ReadAll(res.Body)
 }
 
