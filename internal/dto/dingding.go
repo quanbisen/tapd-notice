@@ -42,6 +42,15 @@ type DingdingDeptUserListResult struct {
 	}
 }
 
+type DingdingGetUserResult struct {
+	DingdingBase
+	Result struct {
+		Email  string `json:"email"`
+		Title  string `json:"title"`
+		Mobile string `json:"mobile"`
+	}
+}
+
 type DingdingSendAppMessageResult struct {
 	DingdingBase
 	SubCode string `json:"sub_code"`

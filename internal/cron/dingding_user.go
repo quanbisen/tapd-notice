@@ -42,11 +42,26 @@ func (c *DingdingUserCronJob) Run() {
 			continue
 		}
 		for i := range deptUsers {
-			user := model.DingdingUser{
-				UserId:   deptUsers[i].UserId,
-				Name:     deptUsers[i].Name,
-				Username: strings.Join(pinyin.LazyPinyin(deptUsers[i].Name, args), ""),
-				DeptId:   dept.DeptId,
+			var user model.DingdingUser
+			res, err := c.Client.GetUser(deptUsers[i].UserId)
+			if err != nil {
+				log.Printf("DingdingUserCronJob GetUser failed, user_id: %s", deptUsers[i].UserId)
+				user = model.DingdingUser{
+					UserId:   deptUsers[i].UserId,
+					Name:     deptUsers[i].Name,
+					Username: strings.Join(pinyin.LazyPinyin(deptUsers[i].Name, args), ""),
+					DeptId:   dept.DeptId,
+				}
+			} else {
+				user = model.DingdingUser{
+					UserId:   deptUsers[i].UserId,
+					Name:     deptUsers[i].Name,
+					DeptId:   dept.DeptId,
+					Email:    res.Result.Email,
+					Mobile:   res.Result.Mobile,
+					Title:    res.Result.Title,
+					Username: strings.Split(res.Result.Email, "@")[0],
+				}
 			}
 			users = append(users, user)
 		}

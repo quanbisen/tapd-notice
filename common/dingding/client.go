@@ -148,6 +148,27 @@ func (c *Client) listDeptUser(data map[string]interface{}) (*dto.DingdingDeptUse
 	return &res, nil
 }
 
+func (c *Client) GetUser(userId string) (*dto.DingdingGetUserResult, error) {
+	var res dto.DingdingGetUserResult
+	url := c.getUrlPrefix() + fmt.Sprintf("/topapi/v2/user/get?access_token=%s", c.accessToken)
+	data := make(map[string]interface{}, 0)
+	data["userid"] = userId
+	byts, err := c.doRequest(url, "POST", data)
+	if err != nil {
+		log.Printf("Dingding Client GetUser failed, error: %s\n", err)
+		return nil, err
+	}
+	if err = json.Unmarshal(byts, &res); err != nil {
+		log.Printf("Dingding Client GetUser failed, json.Unmarshal error: %s\n", err)
+		return nil, err
+	}
+	if res.ErrCode != 0 || res.ErrMsg != "ok" {
+		log.Printf("Dingding Client GetUser failed, error: %s\n", res.ErrMsg)
+		return nil, fmt.Errorf("dingding Client GetUser failed, error: %s", res.ErrMsg)
+	}
+	return &res, nil
+}
+
 func (c *Client) SendAppMessage(msg map[string]interface{}, userIdList []string) (*dto.DingdingSendAppMessageResult, error) {
 	if len(userIdList) == 0 {
 		return nil, errors.New("no userid to received")

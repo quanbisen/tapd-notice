@@ -220,7 +220,11 @@ func (s *WebhookService) sendMessage(title string, text string, data *dto.Webhoo
 		user := model.DingdingUser{}
 		if err := s.Orm.Model(&user).First(&user, "username=?", username).Error; err != nil {
 			log.Printf("WebhookService sendMessage failed, Find user error: %s\n", err)
-			continue
+			log.Println("WebhookService try to find user by name")
+			if err := s.Orm.Model(&user).First(&user, "name=?", adviseUser).Error; err != nil {
+				log.Printf("WebhookService find user by name failed, error: %s\n", err)
+				continue
+			}
 		}
 		userIds = append(userIds, user.UserId)
 	}
